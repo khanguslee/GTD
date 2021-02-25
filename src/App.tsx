@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container} from 'rbx';
+import { Container } from 'rbx';
 
 import Header from './components/Header';
 import './App.scss';
