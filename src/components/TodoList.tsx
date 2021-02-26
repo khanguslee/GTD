@@ -9,6 +9,7 @@ import TodoCard from './TodoCard';
 interface TodoListTab {
   index: TodoListTabIndex;
   title: string;
+  status: TodoStatus;
 }
 
 enum TodoListTabIndex {
@@ -18,10 +19,6 @@ enum TodoListTabIndex {
 }
 
 function TodoList() {
-  const todos = useTypedSelector((state) =>
-    getTodosByStatus(state, TodoStatus.TODO)
-  );
-
   const [activeTabIndex, setActiveTabIndex] = useState<TodoListTabIndex>(
     TodoListTabIndex.TODO
   );
@@ -30,18 +27,25 @@ function TodoList() {
     {
       index: TodoListTabIndex.TODO,
       title: 'Todo',
+      status: TodoStatus.TODO,
     },
     {
       index: TodoListTabIndex.AWAIT,
       title: 'Awaiting',
+      status: TodoStatus.AWAITING,
     },
     {
       index: TodoListTabIndex.DONE,
       title: 'Done',
+      status: TodoStatus.DONE,
     },
   ];
 
   const isTabSelected = (index: number) => activeTabIndex === index;
+
+  const todos = useTypedSelector((state) =>
+    getTodosByStatus(state, tabConfig[activeTabIndex].status)
+  );
 
   return (
     <Section>
