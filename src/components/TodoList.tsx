@@ -45,7 +45,7 @@ function TodoList() {
 
   return (
     <Section>
-      <Tab.Group>
+      <Tab.Group fullwidth kind="toggle">
         {tabConfig.map((item, index) => (
           <Tab
             key={`${item.title}-tab`}
