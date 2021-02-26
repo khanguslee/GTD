@@ -8,7 +8,7 @@ import './App.scss';
 
 function App() {
   return (
-    <Container fluix>
+    <Container fluid>
       <Header />
 
       <AddTodo />
