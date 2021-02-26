@@ -23,6 +23,7 @@ function DoneButton(props: DoneButtonProps) {
       size={size}
       outlined={false}
       color="white"
+      tooltip={'Mark as Done'}
       onClick={props.onClickHandler}
     >
       <Icon size={size}>
