@@ -15,28 +15,30 @@ function AddTodo() {
 
   return (
     <Section>
-      <Field kind="addons">
-        <Control expanded>
-          <Input
-            placeholder="Add Todo"
-            size="medium"
-            value={todoText}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTodoText(e.target.value)
-            }
-          />
-        </Control>
+      <form onSubmit={(event) => event.preventDefault()}>
+        <Field kind="addons">
+          <Control expanded>
+            <Input
+              placeholder="Add Todo"
+              size="medium"
+              value={todoText}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTodoText(e.target.value)
+              }
+            />
+          </Control>
 
-        <Control>
-          <Button
-            color="primary"
-            size="medium"
-            onClick={() => addTodoHandler()}
-          >
-            Add
-          </Button>
-        </Control>
-      </Field>
+          <Control>
+            <Button
+              color="primary"
+              size="medium"
+              onClick={() => addTodoHandler()}
+            >
+              Add
+            </Button>
+          </Control>
+        </Field>
+      </form>
     </Section>
   );
 }
