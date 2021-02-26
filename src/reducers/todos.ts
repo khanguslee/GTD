@@ -12,7 +12,7 @@ const reducer = (state: TodoState = initialTodoState, action: TodoAction) => {
       const { id } = action.payload;
       return {
         ...state,
-        allIds: [...state.allIds, id],
+        allIds: [id, ...state.allIds],
         byIds: {
           ...state.byIds,
           [id]: action.payload,

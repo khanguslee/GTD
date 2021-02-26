@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Button, Icon, Title, Media } from 'rbx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCheckSquare, faClock } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 
 import { setTodoStatus } from '../action-creators/todos';
@@ -11,11 +12,40 @@ interface TodoCardProps {
   todo: Todo;
 }
 
-interface DoneButtonProps {
+interface ActionButtonProps {
+  disabled?: boolean;
+  onClickHandler: () => void;
+}
+interface TodoCardActionProps {
+  icon: IconProp;
+  tooltip?: string;
+  disabled?: boolean;
   onClickHandler: () => void;
 }
 
-function DoneButton(props: DoneButtonProps) {
+function AwaitButton(props: ActionButtonProps) {
+  return (
+    <TodoCardAction
+      icon={faClock}
+      tooltip={'Mark as Awaiting'}
+      disabled={props.disabled}
+      onClickHandler={props.onClickHandler}
+    />
+  );
+}
+
+function DoneButton(props: ActionButtonProps) {
+  return (
+    <TodoCardAction
+      icon={faCheckSquare}
+      tooltip={'Mark as Done'}
+      disabled={props.disabled}
+      onClickHandler={props.onClickHandler}
+    />
+  );
+}
+
+function TodoCardAction(props: TodoCardActionProps) {
   const size = 'medium';
 
   return (
@@ -23,11 +53,12 @@ function DoneButton(props: DoneButtonProps) {
       size={size}
       outlined={false}
       color="white"
-      tooltip={'Mark as Done'}
+      tooltip={props.disabled ? 'Already set' : props.tooltip}
+      disabled={props.disabled}
       onClick={props.onClickHandler}
     >
       <Icon size={size}>
-        <FontAwesomeIcon icon={faCheckSquare} size={'lg'} />
+        <FontAwesomeIcon icon={props.icon} size={'lg'} />
       </Icon>
     </Button>
   );
@@ -39,6 +70,11 @@ function TodoCard(props: TodoCardProps) {
   const onDoneButtonClick = () => {
     dispatch(setTodoStatus(props.todo.id, TodoStatus.DONE));
   };
+
+  const onAwaitButtonClick = () => {
+    dispatch(setTodoStatus(props.todo.id, TodoStatus.AWAITING));
+  };
+
   return (
     <Box>
       <Media>
@@ -46,12 +82,18 @@ function TodoCard(props: TodoCardProps) {
           <Title subtitle size={4}>
             {props.todo.content}
           </Title>
+          <small>{props.todo.created.toLocaleString()}</small>
         </Media.Item>
 
         <Media.Item align="right">
-          {props.todo.status !== TodoStatus.DONE && (
-            <DoneButton onClickHandler={() => onDoneButtonClick()} />
-          )}
+          <AwaitButton
+            onClickHandler={() => onAwaitButtonClick()}
+            disabled={props.todo.status === TodoStatus.AWAITING}
+          />
+          <DoneButton
+            onClickHandler={() => onDoneButtonClick()}
+            disabled={props.todo.status === TodoStatus.DONE}
+          />
         </Media.Item>
       </Media>
     </Box>
