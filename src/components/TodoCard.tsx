@@ -48,7 +48,9 @@ function TodoCard(props: TodoCardProps) {
         </Media.Item>
 
         <Media.Item align="right">
-          <DoneButton onClickHandler={() => onDoneButtonClick()} />
+          {props.todo.status !== TodoStatus.DONE && (
+            <DoneButton onClickHandler={() => onDoneButtonClick()} />
+          )}
         </Media.Item>
       </Media>
     </Box>
