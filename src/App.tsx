@@ -2,8 +2,9 @@ import React from 'react';
 import { Container } from 'rbx';
 
 import Header from './components/Header';
-import './App.scss';
 import AddTodo from './components/AddTodo';
+import TodoList from './components/TodoList';
+import './App.scss';
 
 function App() {
   return (
@@ -11,6 +12,8 @@ function App() {
       <Header />
 
       <AddTodo />
+
+      <TodoList />
     </Container>
   );
 }
