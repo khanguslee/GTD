@@ -4,3 +4,5 @@ import { devToolsEnhancer } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 
 export default createStore(rootReducer, devToolsEnhancer({}));
+
+export type RootState = ReturnType<typeof rootReducer>;

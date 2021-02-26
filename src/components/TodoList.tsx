@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { Section, Tab } from 'rbx';
+import { useTypedSelector } from '../selectors';
+
+import { TodoStatus } from '../models/todos';
+import { getTodosByStatus } from '../selectors/todos';
+import TodoCard from './TodoCard';
 
 interface TodoListTab {
   index: TodoListTabIndex;
@@ -13,9 +18,14 @@ enum TodoListTabIndex {
 }
 
 function TodoList() {
+  const todos = useTypedSelector((state) =>
+    getTodosByStatus(state, TodoStatus.TODO)
+  );
+
   const [activeTabIndex, setActiveTabIndex] = useState<TodoListTabIndex>(
     TodoListTabIndex.TODO
   );
+
   const tabConfig: TodoListTab[] = [
     {
       index: TodoListTabIndex.TODO,
@@ -46,6 +56,9 @@ function TodoList() {
           </Tab>
         ))}
       </Tab.Group>
+      {todos.map(
+        (todo) => todo && <TodoCard key={`${todo.id}-card`} todo={todo} />
+      )}
     </Section>
   );
 }
