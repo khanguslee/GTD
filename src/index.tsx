@@ -7,6 +7,8 @@ import App from './App';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
 
+require('dotenv').config();
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
