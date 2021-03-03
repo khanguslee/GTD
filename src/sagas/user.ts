@@ -25,7 +25,7 @@ function* userLoginSaga(action: ILoginUserAction) {
         console.log(
           `Logged in with id: ${user.id} and name: ${user.profile.name}`
         );
-        yield put(loginUser.success());
+        yield put(loginUser.success(user));
         break;
       }
       default:
