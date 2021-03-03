@@ -4,10 +4,13 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 import App from './App';
-import store from './store';
+import configureStore from './store';
+import rootSaga from './sagas';
 import reportWebVitals from './reportWebVitals';
 
-require('dotenv').config();
+const initialState = {};
+const store = configureStore(initialState);
+store.runSaga(rootSaga);
 
 ReactDOM.render(
   <React.StrictMode>
