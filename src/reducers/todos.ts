@@ -1,4 +1,4 @@
-import { TodoAction, TodoActions } from '../action-creators/actionTypes';
+import { ITodoAction, TodoActions } from '../action-creators/actionTypes';
 import { TodoState } from '../models/todos';
 
 export const initialTodoState: TodoState = {
@@ -6,7 +6,7 @@ export const initialTodoState: TodoState = {
   byIds: {},
 };
 
-const reducer = (state: TodoState = initialTodoState, action: TodoAction) => {
+const reducer = (state: TodoState = initialTodoState, action: ITodoAction) => {
   switch (action.type) {
     case TodoActions.ADD: {
       const { id } = action.payload;

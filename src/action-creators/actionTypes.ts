@@ -1,20 +1,37 @@
 import { Todo } from '../models/todos';
+import { User } from '../models/user';
 
-export interface BaseAction<T, U> {
-  type: T;
-  payload: U;
+import { loginUser } from './auth';
+
+/* Todo */
+export interface ITodoAddAction {
+  type: TodoActions.ADD;
+  payload: Todo;
 }
 
-export type TodoAddAction = BaseAction<TodoActions.ADD, Todo>;
-
-export type TodoSetStatusAction = BaseAction<
-  TodoActions.UPDATE_STATUS,
-  Pick<Todo, 'id' | 'status'>
->;
+export interface ITodoSetStatusAction {
+  type: TodoActions.UPDATE_STATUS;
+  payload: Pick<Todo, 'id' | 'status'>;
+}
 
 export enum TodoActions {
-  ADD = 'ADD',
-  UPDATE_STATUS = 'UPDATE_STATUS',
+  ADD = 'TODO/ADD',
+  UPDATE_STATUS = 'TODO/UPDATE_STATUS',
 }
 
-export type TodoAction = TodoAddAction | TodoSetStatusAction;
+export type ITodoAction = ITodoAddAction | ITodoSetStatusAction;
+
+/* User */
+export interface ISetUserAction {
+  type: UserActions.SET;
+  payload: User;
+}
+
+export type ILoginUserAction = ReturnType<typeof loginUser>;
+
+export enum UserActions {
+  LOGIN = 'USER/LOGIN',
+  SET = 'USER/SET',
+}
+
+export type IUserAction = ISetUserAction | ILoginUserAction;

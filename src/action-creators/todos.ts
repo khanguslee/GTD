@@ -1,8 +1,12 @@
-import { TodoActions, TodoAddAction, TodoSetStatusAction } from './actionTypes';
+import {
+  TodoActions,
+  ITodoAddAction,
+  ITodoSetStatusAction,
+} from './actionTypes';
 import { Todo, TodoStatus } from '../models/todos';
 import { generateUuid } from '../utils/uuid';
 
-const addTodo = (content: string): TodoAddAction => {
+const addTodo = (content: string): ITodoAddAction => {
   const payload: Todo = {
     id: generateUuid(),
     created: new Date(),
@@ -16,7 +20,10 @@ const addTodo = (content: string): TodoAddAction => {
   };
 };
 
-const setTodoStatus = (id: string, status: TodoStatus): TodoSetStatusAction => {
+const setTodoStatus = (
+  id: string,
+  status: TodoStatus
+): ITodoSetStatusAction => {
   const payload = {
     id,
     status,
