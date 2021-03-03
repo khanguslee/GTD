@@ -1,7 +1,8 @@
 import { all, takeEvery } from 'redux-saga/effects';
 import * as Realm from 'realm-web';
 
-import { UserActions, ILoginUserAction } from '../action-creators/actionTypes';
+import { ILoginUserAction } from '../action-creators/actionTypes';
+import { loginUser } from '../action-creators/auth';
 import { AuthenticationType } from '../models/user';
 
 function* userLoginSaga(action: ILoginUserAction) {
@@ -25,7 +26,7 @@ function* userLoginSaga(action: ILoginUserAction) {
 }
 
 function* userWatcher() {
-  yield takeEvery(UserActions.LOGIN + '/TRIGGER', userLoginSaga);
+  yield takeEvery(loginUser.TRIGGER, userLoginSaga);
 }
 
 export function* userSaga() {
