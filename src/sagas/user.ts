@@ -3,7 +3,7 @@ import * as Realm from 'realm-web';
 
 import { ILoginUserAction } from '../action-creators/actionTypes';
 import { loginUser } from '../action-creators/auth';
-import { AuthenticationType } from '../models/user';
+import { AuthenticationType, User } from '../models/user';
 
 function* userLoginSaga(action: ILoginUserAction) {
   try {
@@ -22,10 +22,11 @@ function* userLoginSaga(action: ILoginUserAction) {
         > = yield app.logIn(credentials);
 
         // Login to realm app using google credentials
-        console.log(
-          `Logged in with id: ${user.id} and name: ${user.profile.name}`
-        );
-        yield put(loginUser.success(user));
+        const storedUser: User = {
+          id: user.id,
+          name: user.profile.name || '',
+        };
+        yield put(loginUser.success(storedUser));
         break;
       }
       default:
