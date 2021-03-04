@@ -3,6 +3,7 @@ import * as Realm from 'realm-web';
 
 import { ILoginUserActionTrigger } from '../action-creators/actionTypes';
 import { loginUser } from '../action-creators/auth';
+import { fetchTodo } from '../action-creators/todos';
 import { AuthenticationType } from '../models/user';
 
 function* userLoginSaga(action: ILoginUserActionTrigger) {
@@ -18,6 +19,7 @@ function* userLoginSaga(action: ILoginUserActionTrigger) {
         const user: Realm.User = yield app.logIn(credentials);
         // Login to realm app using google credentials
         yield put(loginUser.success(user));
+        yield put(fetchTodo.trigger());
         break;
       }
       default:
