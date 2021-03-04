@@ -1,31 +1,40 @@
-import { all, takeEvery } from 'redux-saga/effects';
+import { all, put, takeEvery } from 'redux-saga/effects';
 import * as Realm from 'realm-web';
 
-import { UserActions, ILoginUserAction } from '../action-creators/actionTypes';
+import { ILoginUserActionTrigger } from '../action-creators/actionTypes';
+import { loginUser } from '../action-creators/auth';
+import { fetchTodo } from '../action-creators/todos';
 import { AuthenticationType } from '../models/user';
 
-function* userLoginSaga(action: ILoginUserAction) {
-  const app = new Realm.App(process.env.REACT_APP_REALM_APP_ID || '');
-  switch (action.payload.type) {
-    case AuthenticationType.GOOGLE: {
-      const credentials = Realm.Credentials.google(action.payload.credentials);
-      const user: Realm.User<
-        globalThis.Realm.DefaultFunctionsFactory,
-        any,
-        globalThis.Realm.DefaultUserProfileData
-      > = yield app.logIn(credentials);
-      console.log(
-        `Logged in with id: ${user.id} and name: ${user.profile.name}`
-      );
-      break;
+function* userLoginSaga(action: ILoginUserActionTrigger) {
+  try {
+    const app = new Realm.App(process.env.REACT_APP_REALM_APP_ID || '');
+    switch (action.payload.type) {
+      case AuthenticationType.GOOGLE: {
+        // Request credentials from Realm
+        yield put(loginUser.request());
+        const credentials = Realm.Credentials.google(
+          action.payload.credentials
+        );
+        const user: Realm.User = yield app.logIn(credentials);
+        // Login to realm app using google credentials
+        yield put(loginUser.success(user));
+        yield put(fetchTodo.trigger());
+        break;
+      }
+      default:
+        console.error(`Invalid authentication type - ${action.payload.type}`);
+        yield put(loginUser.failure());
     }
-    default:
-      console.error(`Invalid authentication type - ${action.payload.type}`);
+  } catch (error) {
+    yield put(loginUser.failure(error));
+  } finally {
+    yield put(loginUser.fulfill());
   }
 }
 
 function* userWatcher() {
-  yield takeEvery(UserActions.LOGIN + '/TRIGGER', userLoginSaga);
+  yield takeEvery(loginUser.TRIGGER, userLoginSaga);
 }
 
 export function* userSaga() {

@@ -1,14 +1,7 @@
 import { createRoutine } from 'redux-saga-routines';
 
-import { ISetUserAction, UserActions } from './actionTypes';
-import { AuthenticationType, User } from '../models/user';
-
-const setUser = (user: User): ISetUserAction => {
-  return {
-    type: UserActions.SET,
-    payload: user,
-  };
-};
+import { UserActions } from './actionTypes';
+import { AuthenticationType } from '../models/user';
 
 const loginUser = createRoutine(UserActions.LOGIN, {
   trigger: (type: AuthenticationType, credentials: string) => {
@@ -17,6 +10,6 @@ const loginUser = createRoutine(UserActions.LOGIN, {
       credentials,
     };
   },
+  success: (user: Realm.User) => user,
 });
-
-export { setUser, loginUser };
+export { loginUser };

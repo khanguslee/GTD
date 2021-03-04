@@ -1,12 +1,10 @@
-import {
-  TodoActions,
-  ITodoAddAction,
-  ITodoSetStatusAction,
-} from './actionTypes';
+import { createRoutine } from 'redux-saga-routines';
+
+import { TodoActions, ITodoAction } from './actionTypes';
 import { Todo, TodoStatus } from '../models/todos';
 import { generateUuid } from '../utils/uuid';
 
-const addTodo = (content: string): ITodoAddAction => {
+const addTodo = (content: string): ITodoAction => {
   const payload: Todo = {
     id: generateUuid(),
     created: new Date(),
@@ -20,10 +18,11 @@ const addTodo = (content: string): ITodoAddAction => {
   };
 };
 
-const setTodoStatus = (
-  id: string,
-  status: TodoStatus
-): ITodoSetStatusAction => {
+const fetchTodo = createRoutine(TodoActions.FETCH, {
+  success: (todos: Todo[]) => todos,
+});
+
+const setTodoStatus = (id: string, status: TodoStatus): ITodoAction => {
   const payload = {
     id,
     status,
@@ -34,4 +33,4 @@ const setTodoStatus = (
   };
 };
 
-export { addTodo, setTodoStatus };
+export { addTodo, fetchTodo, setTodoStatus };

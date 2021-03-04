@@ -9,6 +9,10 @@ function AddTodo() {
   const [todoText, setTodoText] = useState<string>('');
 
   const addTodoHandler = () => {
+    // Validate todo text
+    if (todoText === '') {
+      return;
+    }
     dispatch(addTodo(todoText));
     setTodoText('');
   };
