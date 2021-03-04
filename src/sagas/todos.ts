@@ -7,6 +7,8 @@ import { Todo } from '../models/todos';
 
 function* addTodoIntoDatabaseSaga(action: ITodoAddAction) {
   const user: Realm.User = yield select(getUser);
+  // Only add into database if the user is logged in.
+  if (!user) return;
   const todo = action.payload;
   yield user.callFunction('addTodo', todo);
 }
