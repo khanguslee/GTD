@@ -3,6 +3,8 @@ import { RootState } from '../store';
 
 const getAuth = (store: RootState): AuthState => store.auth;
 
-const getName = (store: RootState) => getAuth(store).user.name;
+const getName = (store: RootState) => getAuth(store).user?.profile.name || '';
 
-export { getAuth, getName };
+const getUser = (store: RootState) => getAuth(store).user;
+
+export { getAuth, getName, getUser };

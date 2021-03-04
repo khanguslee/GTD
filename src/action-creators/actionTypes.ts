@@ -1,5 +1,4 @@
 import { Todo } from '../models/todos';
-import { User } from '../models/user';
 
 import { loginUser } from './auth';
 
@@ -22,16 +21,16 @@ export enum TodoActions {
 export type ITodoAction = ITodoAddAction | ITodoSetStatusAction;
 
 /* User */
-export interface ISetUserAction {
-  type: UserActions.SET;
-  payload: User;
-}
 
-export type ILoginUserAction = ReturnType<typeof loginUser>;
+// TODO: Create a generic type for all redux saga routine types
+export type ILoginUserActionTrigger = ReturnType<typeof loginUser.trigger>;
+export type ILoginUserActionSuccess = ReturnType<typeof loginUser.success>;
+export type ILoginUserAction =
+  | ILoginUserActionTrigger
+  | ILoginUserActionSuccess;
 
 export enum UserActions {
   LOGIN = 'USER/LOGIN',
-  SET = 'USER/SET',
 }
 
-export type IUserAction = ISetUserAction | ILoginUserAction;
+export type IUserAction = ILoginUserAction;

@@ -1,8 +1,12 @@
-import { all, takeEvery } from 'redux-saga/effects';
+import { all, select, takeEvery } from 'redux-saga/effects';
+
 import { ITodoAction, TodoActions } from '../action-creators/actionTypes';
+import { getUser } from '../selectors/auth';
 
 function* addTodoIntoDatabaseSaga(action: ITodoAction) {
-  yield console.log(action);
+  const user: Realm.User = yield select(getUser);
+  const todo = action.payload;
+  yield user.callFunction('addTodo', todo);
 }
 
 function* todoWatcher() {

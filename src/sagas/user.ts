@@ -1,11 +1,11 @@
 import { all, put, takeEvery } from 'redux-saga/effects';
 import * as Realm from 'realm-web';
 
-import { ILoginUserAction } from '../action-creators/actionTypes';
+import { ILoginUserActionTrigger } from '../action-creators/actionTypes';
 import { loginUser } from '../action-creators/auth';
-import { AuthenticationType, User } from '../models/user';
+import { AuthenticationType } from '../models/user';
 
-function* userLoginSaga(action: ILoginUserAction) {
+function* userLoginSaga(action: ILoginUserActionTrigger) {
   try {
     const app = new Realm.App(process.env.REACT_APP_REALM_APP_ID || '');
     switch (action.payload.type) {
@@ -15,18 +15,9 @@ function* userLoginSaga(action: ILoginUserAction) {
         const credentials = Realm.Credentials.google(
           action.payload.credentials
         );
-        const user: Realm.User<
-          globalThis.Realm.DefaultFunctionsFactory,
-          any,
-          globalThis.Realm.DefaultUserProfileData
-        > = yield app.logIn(credentials);
-
+        const user: Realm.User = yield app.logIn(credentials);
         // Login to realm app using google credentials
-        const storedUser: User = {
-          id: user.id,
-          name: user.profile.name || '',
-        };
-        yield put(loginUser.success(storedUser));
+        yield put(loginUser.success(user));
         break;
       }
       default:
