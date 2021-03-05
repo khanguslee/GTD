@@ -1,6 +1,10 @@
 import { all, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
-import { ITodoAddAction, TodoActions } from '../action-creators/actionTypes';
+import {
+  ITodoAddAction,
+  ITodoSetStatusAction,
+  TodoActions,
+} from '../action-creators/actionTypes';
 import { fetchTodo } from '../action-creators/todos';
 import { getUser } from '../selectors/auth';
 import { Todo } from '../models/todos';
@@ -11,6 +15,12 @@ function* addTodoIntoDatabaseSaga(action: ITodoAddAction) {
   if (!user) return;
   const todo = action.payload;
   yield user.callFunction('addTodo', todo);
+}
+
+function* updateTodoSaga(action: ITodoSetStatusAction) {
+  const user: Realm.User = yield select(getUser);
+  const todo = action.payload;
+  yield user.callFunction('updateTodo', todo);
 }
 
 function* loadExistingTodosSaga() {
@@ -31,10 +41,14 @@ function* addTodoWatcher() {
   yield takeEvery(TodoActions.ADD, addTodoIntoDatabaseSaga);
 }
 
+function* updateTodoWatcher() {
+  yield takeEvery(TodoActions.UPDATE_STATUS, updateTodoSaga);
+}
+
 function* loginSuccessWatcher() {
   yield takeLatest(fetchTodo.TRIGGER, loadExistingTodosSaga);
 }
 
 export function* todosSaga() {
-  yield all([addTodoWatcher(), loginSuccessWatcher()]);
+  yield all([addTodoWatcher(), loginSuccessWatcher(), updateTodoWatcher()]);
 }
