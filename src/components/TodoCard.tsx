@@ -91,6 +91,12 @@ function TodoCard(props: TodoCardProps) {
   return (
     <Box>
       <Media>
+        <Media.Item align="left">
+          <DoneButton
+            isDone={props.todo.status === TodoStatus.DONE}
+            onClickHandler={() => onDoneButtonClick()}
+          />
+        </Media.Item>
         <Media.Item>
           <Title subtitle size={4}>
             {props.todo.content}
@@ -102,10 +108,6 @@ function TodoCard(props: TodoCardProps) {
           <AwaitButton
             onClickHandler={() => onAwaitButtonClick()}
             disabled={props.todo.status === TodoStatus.AWAITING}
-          />
-          <DoneButton
-            isDone={props.todo.status === TodoStatus.DONE}
-            onClickHandler={() => onDoneButtonClick()}
           />
         </Media.Item>
       </Media>
