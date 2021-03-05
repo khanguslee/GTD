@@ -6,6 +6,7 @@ import {
   faSquare,
   faCheckSquare,
   faClock,
+  faTrashAlt,
 } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 
@@ -50,6 +51,17 @@ function DoneButton(props: DoneButtonProps) {
     <TodoCardAction
       icon={icon}
       tooltip={`Mark as ${tooltipStatus}`}
+      disabled={props.disabled}
+      onClickHandler={props.onClickHandler}
+    />
+  );
+}
+
+function DeleteButton(props: ActionButtonProps) {
+  return (
+    <TodoCardAction
+      icon={faTrashAlt}
+      tooltip={'Mark Delete'}
       disabled={props.disabled}
       onClickHandler={props.onClickHandler}
     />
@@ -109,6 +121,8 @@ function TodoCard(props: TodoCardProps) {
             onClickHandler={() => onAwaitButtonClick()}
             disabled={props.todo.status === TodoStatus.AWAITING}
           />
+
+          <DeleteButton onClickHandler={() => {}} />
         </Media.Item>
       </Media>
     </Box>
