@@ -20,17 +20,20 @@ function* addTodoIntoDatabaseSaga(action: ITodoAddAction) {
 
 function* updateTodoSaga(action: ITodoSetStatusAction) {
   const user: Realm.User = yield select(getUser);
+  if (!user) return;
   const todo = action.payload;
   yield user.callFunction('updateTodo', todo);
 }
 function* deleteTodoInDatabaseSaga(action: ITodoDeleteAction) {
   const user: Realm.User = yield select(getUser);
+  if (!user) return;
   const todo = action.payload;
   yield user.callFunction('deleteTodo', todo);
 }
 
 function* loadExistingTodosSaga() {
   const user: Realm.User = yield select(getUser);
+  if (!user) return;
   yield put(fetchTodo.request());
   try {
     // TODO: Implement pagination
