@@ -2,10 +2,15 @@ import React from 'react';
 import { Box, Button, Icon, Title, Media } from 'rbx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faCheckSquare, faClock } from '@fortawesome/free-regular-svg-icons';
+import {
+  faSquare,
+  faCheckSquare,
+  faClock,
+  faTrashAlt,
+} from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 
-import { setTodoStatus } from '../action-creators/todos';
+import { setTodoStatus, deleteTodo } from '../action-creators/todos';
 import { Todo, TodoStatus } from '../models/todos';
 
 interface TodoCardProps {
@@ -16,6 +21,11 @@ interface ActionButtonProps {
   disabled?: boolean;
   onClickHandler: () => void;
 }
+
+interface DoneButtonProps extends ActionButtonProps {
+  isDone: boolean;
+}
+
 interface TodoCardActionProps {
   icon: IconProp;
   tooltip?: string;
@@ -34,11 +44,24 @@ function AwaitButton(props: ActionButtonProps) {
   );
 }
 
-function DoneButton(props: ActionButtonProps) {
+function DoneButton(props: DoneButtonProps) {
+  const icon = props.isDone ? faCheckSquare : faSquare;
+  const tooltipStatus = props.isDone ? 'Todo' : 'Done';
   return (
     <TodoCardAction
-      icon={faCheckSquare}
-      tooltip={'Mark as Done'}
+      icon={icon}
+      tooltip={`Mark as ${tooltipStatus}`}
+      disabled={props.disabled}
+      onClickHandler={props.onClickHandler}
+    />
+  );
+}
+
+function DeleteButton(props: ActionButtonProps) {
+  return (
+    <TodoCardAction
+      icon={faTrashAlt}
+      tooltip={'Mark Delete'}
       disabled={props.disabled}
       onClickHandler={props.onClickHandler}
     />
@@ -68,16 +91,28 @@ function TodoCard(props: TodoCardProps) {
   const dispatch = useDispatch();
 
   const onDoneButtonClick = () => {
-    dispatch(setTodoStatus(props.todo.id, TodoStatus.DONE));
+    const todoStatus =
+      props.todo.status === TodoStatus.DONE ? TodoStatus.TODO : TodoStatus.DONE;
+    dispatch(setTodoStatus(props.todo.id, todoStatus));
   };
 
   const onAwaitButtonClick = () => {
     dispatch(setTodoStatus(props.todo.id, TodoStatus.AWAITING));
   };
 
+  const onDeleteButtonClick = () => {
+    dispatch(deleteTodo.trigger(props.todo));
+  };
+
   return (
     <Box>
       <Media>
+        <Media.Item align="left">
+          <DoneButton
+            isDone={props.todo.status === TodoStatus.DONE}
+            onClickHandler={() => onDoneButtonClick()}
+          />
+        </Media.Item>
         <Media.Item>
           <Title subtitle size={4}>
             {props.todo.content}
@@ -90,10 +125,8 @@ function TodoCard(props: TodoCardProps) {
             onClickHandler={() => onAwaitButtonClick()}
             disabled={props.todo.status === TodoStatus.AWAITING}
           />
-          <DoneButton
-            onClickHandler={() => onDoneButtonClick()}
-            disabled={props.todo.status === TodoStatus.DONE}
-          />
+
+          <DeleteButton onClickHandler={() => onDeleteButtonClick()} />
         </Media.Item>
       </Media>
     </Box>

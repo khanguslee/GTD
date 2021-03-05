@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Section, Tab } from 'rbx';
-import { useTypedSelector } from '../selectors';
+import { Section, Tab, Icon } from 'rbx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCheckSquare, faClock } from '@fortawesome/free-regular-svg-icons';
+import { faInbox } from '@fortawesome/free-solid-svg-icons';
 
+import { useTypedSelector } from '../selectors';
 import { TodoStatus } from '../models/todos';
 import { getTodosByStatus } from '../selectors/todos';
 import TodoCard from './TodoCard';
@@ -9,6 +13,7 @@ import TodoCard from './TodoCard';
 interface TodoListTab {
   index: TodoListTabIndex;
   title: string;
+  icon?: IconProp;
   status: TodoStatus;
 }
 
@@ -28,16 +33,19 @@ function TodoList() {
       index: TodoListTabIndex.TODO,
       title: 'Todo',
       status: TodoStatus.TODO,
+      icon: faInbox,
     },
     {
       index: TodoListTabIndex.AWAIT,
       title: 'Awaiting',
       status: TodoStatus.AWAITING,
+      icon: faClock,
     },
     {
       index: TodoListTabIndex.DONE,
       title: 'Done',
       status: TodoStatus.DONE,
+      icon: faCheckSquare,
     },
   ];
 
@@ -49,13 +57,18 @@ function TodoList() {
 
   return (
     <Section>
-      <Tab.Group fullwidth kind="toggle">
+      <Tab.Group fullwidth>
         {tabConfig.map((item, index) => (
           <Tab
             key={`${item.title}-tab`}
             active={isTabSelected(item.index)}
             onClick={() => setActiveTabIndex(item.index)}
           >
+            {item.icon && (
+              <Icon size="small">
+                <FontAwesomeIcon icon={item.icon} />
+              </Icon>
+            )}
             {item.title}
           </Tab>
         ))}
