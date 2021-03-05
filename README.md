@@ -30,3 +30,13 @@ You will need the following `.env` variables set to enable oauth to the applicat
 2. Start development server
 
     `yarn run start`
+
+## Deployment
+
+The application is currently deployed using Heroku. To setup heroku, follow [this link](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) for further details.
+
+Once setup, you will need to manually push to the heroku remote.
+
+``` bash
+git push heroku main
+```
