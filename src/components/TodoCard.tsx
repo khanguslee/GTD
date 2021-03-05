@@ -45,10 +45,11 @@ function AwaitButton(props: ActionButtonProps) {
 
 function DoneButton(props: DoneButtonProps) {
   const icon = props.isDone ? faCheckSquare : faSquare;
+  const tooltipStatus = props.isDone ? 'Todo' : 'Done';
   return (
     <TodoCardAction
       icon={icon}
-      tooltip={'Mark as Done'}
+      tooltip={`Mark as ${tooltipStatus}`}
       disabled={props.disabled}
       onClickHandler={props.onClickHandler}
     />
@@ -78,7 +79,9 @@ function TodoCard(props: TodoCardProps) {
   const dispatch = useDispatch();
 
   const onDoneButtonClick = () => {
-    dispatch(setTodoStatus(props.todo.id, TodoStatus.DONE));
+    const todoStatus =
+      props.todo.status === TodoStatus.DONE ? TodoStatus.TODO : TodoStatus.DONE;
+    dispatch(setTodoStatus(props.todo.id, todoStatus));
   };
 
   const onAwaitButtonClick = () => {
@@ -103,7 +106,6 @@ function TodoCard(props: TodoCardProps) {
           <DoneButton
             isDone={props.todo.status === TodoStatus.DONE}
             onClickHandler={() => onDoneButtonClick()}
-            disabled={props.todo.status === TodoStatus.DONE}
           />
         </Media.Item>
       </Media>
