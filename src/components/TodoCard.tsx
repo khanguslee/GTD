@@ -2,7 +2,11 @@ import React from 'react';
 import { Box, Button, Icon, Title, Media } from 'rbx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faCheckSquare, faClock } from '@fortawesome/free-regular-svg-icons';
+import {
+  faSquare,
+  faCheckSquare,
+  faClock,
+} from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 
 import { setTodoStatus } from '../action-creators/todos';
@@ -16,6 +20,11 @@ interface ActionButtonProps {
   disabled?: boolean;
   onClickHandler: () => void;
 }
+
+interface DoneButtonProps extends ActionButtonProps {
+  isDone: boolean;
+}
+
 interface TodoCardActionProps {
   icon: IconProp;
   tooltip?: string;
@@ -34,10 +43,11 @@ function AwaitButton(props: ActionButtonProps) {
   );
 }
 
-function DoneButton(props: ActionButtonProps) {
+function DoneButton(props: DoneButtonProps) {
+  const icon = props.isDone ? faCheckSquare : faSquare;
   return (
     <TodoCardAction
-      icon={faCheckSquare}
+      icon={icon}
       tooltip={'Mark as Done'}
       disabled={props.disabled}
       onClickHandler={props.onClickHandler}
@@ -91,6 +101,7 @@ function TodoCard(props: TodoCardProps) {
             disabled={props.todo.status === TodoStatus.AWAITING}
           />
           <DoneButton
+            isDone={props.todo.status === TodoStatus.DONE}
             onClickHandler={() => onDoneButtonClick()}
             disabled={props.todo.status === TodoStatus.DONE}
           />
