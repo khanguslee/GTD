@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch } from 'react-redux';
 
-import { setTodoStatus } from '../action-creators/todos';
+import { setTodoStatus, deleteTodo } from '../action-creators/todos';
 import { Todo, TodoStatus } from '../models/todos';
 
 interface TodoCardProps {
@@ -100,6 +100,10 @@ function TodoCard(props: TodoCardProps) {
     dispatch(setTodoStatus(props.todo.id, TodoStatus.AWAITING));
   };
 
+  const onDeleteButtonClick = () => {
+    dispatch(deleteTodo.trigger(props.todo));
+  };
+
   return (
     <Box>
       <Media>
@@ -122,7 +126,7 @@ function TodoCard(props: TodoCardProps) {
             disabled={props.todo.status === TodoStatus.AWAITING}
           />
 
-          <DeleteButton onClickHandler={() => {}} />
+          <DeleteButton onClickHandler={() => onDeleteButtonClick()} />
         </Media.Item>
       </Media>
     </Box>

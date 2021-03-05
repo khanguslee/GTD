@@ -27,8 +27,15 @@ export interface ITodoFetchAction {
   type: TodoActions.FETCH_TRIGGER;
 }
 
+export interface ITodoDeleteAction {
+  type: TodoActions.DELETE_TRIGGER;
+  payload: Todo;
+}
+
 export enum TodoActions {
   ADD = 'TODO/ADD',
+  DELETE = 'TODO/DELETE',
+  DELETE_TRIGGER = 'TODO/DELETE/TRIGGER',
   FETCH = 'TODO/FETCH',
   FETCH_TRIGGER = 'TODO/FETCH/TRIGGER',
   FETCH_SUCCESS = 'TODO/FETCH/SUCCESS',
@@ -37,6 +44,7 @@ export enum TodoActions {
 
 export type ITodoAction =
   | ITodoAddAction
+  | ITodoDeleteAction
   | ITodoSetStatusAction
   | ITodoSetAction
   | ITodoFetchAction;

@@ -18,6 +18,8 @@ const addTodo = (content: string): ITodoAction => {
   };
 };
 
+const deleteTodo = createRoutine(TodoActions.DELETE);
+
 const fetchTodo = createRoutine(TodoActions.FETCH, {
   success: (todos: Todo[]) => todos,
 });
@@ -33,4 +35,4 @@ const setTodoStatus = (id: string, status: TodoStatus): ITodoAction => {
   };
 };
 
-export { addTodo, fetchTodo, setTodoStatus };
+export { addTodo, deleteTodo, fetchTodo, setTodoStatus };

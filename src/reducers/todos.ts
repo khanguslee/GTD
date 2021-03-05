@@ -17,6 +17,16 @@ const reducer = (state: TodoState = initialTodoState, action: ITodoAction) => {
       });
       return { ...state, allIds, byIds };
     }
+    case TodoActions.DELETE_TRIGGER: {
+      const deletedTodoId = action.payload.id;
+      const { [deletedTodoId]: value, ...newByIds } = state.byIds;
+
+      return {
+        ...state,
+        allIds: state.allIds.filter((id) => id !== action.payload.id),
+        newByIds,
+      };
+    }
     case TodoActions.ADD: {
       const todo = action.payload;
       const { id } = todo;
